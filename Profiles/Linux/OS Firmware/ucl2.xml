@@ -117,6 +117,7 @@
 	<CMD state="Updater" type="push" body="$ umount /mnt/mmcblk%mmc%p2">Unmounting rootfs partition</CMD>
 	<CMD state="Updater" type="push" body="$ echo Update Complete!">Done</CMD>
   </LIST>
+
   <LIST name="eMMC" desc="Choose eMMC as media">
 	<CMD state="BootStrap" type="boot" body="BootStrap" file ="firmware/u-boot-imx6q%plus%%board%_sd.imx" ifdev="MX6Q">Loading U-boot</CMD>
 	<CMD state="BootStrap" type="boot" body="BootStrap" file ="firmware/u-boot-imx6dl%board%_sd.imx" ifdev="MX6D">Loading U-boot</CMD>
@@ -211,6 +212,56 @@
 	<CMD state="Updater" type="push" body="$ umount /mnt/mmcblk%mmc%p2">Unmounting rootfs partition</CMD>
 	<CMD state="Updater" type="push" body="$ echo Update Complete!">Done</CMD>
   </LIST>
+
+  <LIST name="Linux3035-eMMC" desc="Choose eMMC as media">
+	<CMD state="BootStrap" type="boot" body="BootStrap" file ="firmware/u-boot-imx6q%plus%%board%_sd.imx" ifdev="MX6Q">Loading U-boot</CMD>
+	<CMD state="BootStrap" type="boot" body="BootStrap" file ="firmware/u-boot-imx6dl%board%_sd.imx" ifdev="MX6D">Loading U-boot</CMD>
+	<CMD state="BootStrap" type="boot" body="BootStrap" file ="firmware/u-boot-imx6sx%board%_emmc.imx" ifdev="MX6SX">Loading U-boot</CMD>
+	<CMD state="BootStrap" type="boot" body="BootStrap" file ="firmware/u-boot-imx7d%7duboot%_sd.imx" ifdev="MX7D">Loading U-boot</CMD>
+	<CMD state="BootStrap" type="boot" body="BootStrap" file ="firmware/u-boot-imx6ul%6uluboot%_emmc.imx" ifdev="MX6UL">Loading U-boot</CMD>
+		
+	<CMD state="BootStrap" type="load" file="firmware/zImage" address="0x12000000"
+		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX6Q MX6D">Loading Kernel.</CMD>
+	<CMD state="BootStrap" type="load" file="firmware/zImage" address="0x80800000"
+		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX6SL MX6SX MX7D MX6UL">Loading Kernel.</CMD>
+
+	<CMD state="BootStrap" type="load" file="firmware/%initramfs%" address="0x12C00000"
+		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX6Q MX6D">Loading Initramfs.</CMD>
+	<CMD state="BootStrap" type="load" file="firmware/%initramfs%" address="0x83800000"
+		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX6SL MX6SX MX7D MX6UL">Loading Initramfs.</CMD>
+
+	<CMD state="BootStrap" type="load" file="firmware/zImage-imx6q%plus%-%board%%ldo%.dtb" address="0x18000000"
+		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX6Q">Loading device tree.</CMD>
+	<CMD state="BootStrap" type="load" file="firmware/zImage-imx6dl-%board%%ldo%.dtb" address="0x18000000"
+		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX6D">Loading device tree.</CMD>
+
+	<CMD state="BootStrap" type="jump" > Jumping to OS image. </CMD>
+
+	<CMD state="Updater" type="push" body="send" file="mksdcard42.sh.tar">Sending partition shell</CMD>
+	<CMD state="Updater" type="push" body="$ tar xf $FILE "> Partitioning...</CMD>
+	<CMD state="Updater" type="push" body="$ sh mksdcard.sh /dev/mmcblk3"> Partitioning SD card now...</CMD>
+
+    <CMD state="Updater" type="push" body="$ mmc bootpart enable 7 0 /dev/mmcblk3">enable boot partion 1 to boot</CMD>
+
+	<!-- burn the uboot: -->
+	<CMD state="Updater" type="push" body="send" file="files/u-boot.bin">Sending U-Boot</CMD>
+	<CMD state="Updater" type="push" body="$ dd if=/dev/zero of=/dev/mmcblk3 bs=512 seek=2 count=2000">Clean U-Bootenvironment</CMD>
+	<CMD state="Updater" type="push" body="$ dd if=$FILE of=/dev/mmcblk3 bs=512 seek=2 skip=2">write U-Boot to sdcard</CMD>
+
+	<!-- burn the kernel: -->
+	<CMD state="Updater" type="push" body="send" file="files/uImage">Sending kernel uImage</CMD>
+	<CMD state="Updater" type="push" body="$ dd if=$FILE of=/dev/mmcblk3 bs=1M seek=1 conv=fsync">write kernel image to emmc</CMD>
+
+	<!-- burn the rootfs: -->
+	<CMD state="Updater" type="push" body="$ mkfs.ext3 -j /dev/mmcblk3p1">Formatting rootfs partition</CMD>
+	<CMD state="Updater" type="push" body="$ mkdir -p /mnt/mmcblk3p1"/>
+	<CMD state="Updater" type="push" body="$ mount -t ext3 /dev/mmcblk3p1 /mnt/mmcblk3p1"/>
+	<CMD state="Updater" type="push" body="pipe tar -jxv -C /mnt/mmcblk3p1" file="files/rootfs.tar.bz2">Sending and writting rootfs</CMD>
+	<CMD state="Updater" type="push" body="frf">Finishing rootfs write</CMD>
+	<CMD state="Updater" type="push" body="$ umount /mnt/mmcblk3p1">Unmounting rootfs partition</CMD>
+
+	<CMD state="Updater" type="push" body="$ echo Update Complete!">Done</CMD>
+  </LIST> 
 
   <!-- burn uboot only because spi-nor flash is small (4M). kernel is beyond 5M now -->
   <LIST name="Nor Flash" desc="Choose Nor flash as media">
