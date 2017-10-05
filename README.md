@@ -24,7 +24,7 @@
 
 ### 1.3 [Linux3.14.52-eMMC-MX6DL-ALL.vbs](Linux3.14.52-eMMC-MX6DL-ALL.vbs)：
 
-* `Linux3.14.52、Linux3.15.52 Qt eMMC`烧录脚本；
+* `Linux3.14.52、Linux3.14.52 Qt eMMC`烧录脚本；
 * 烧录系统存放目录：`Profiles/Linux/OS Firmware/files`
 * 存放文件名：
   * `u-boot-imx6dlsabresd_sd.imx`;
