@@ -40,3 +40,14 @@
   * `u-boot.bin`;
   * `uImage`;
   * `rootfs.tar.bz2`;
+
+### 1.5 [Android6.0.1-eMMC-MX6DL-ALL.vbs](Android6.0.1-eMMC-MX6DL-ALL.vbs)：
+
+* `Android 6.0.1 eMMC`烧录脚本；
+* 烧录系统存放目录：`Profiles/Linux/OS Firmware/files/android/sabresd`
+* 存放文件名：
+  * `boot-imx6dl.img`;
+  * `recovery-imx6dl.img`;
+  * `system.img`;
+  * `u-boot-imx6dl.imx`;
+
