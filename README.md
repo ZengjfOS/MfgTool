@@ -51,3 +51,9 @@
   * `system.img`;
   * `u-boot-imx6dl.imx`;
 
+### 1.6 [Linux3.0.35-img-eMMC-MX6DL-ALL.vbs](Linux3.0.35-img-eMMC-MX6DL-ALL.vbs)：
+
+* `Linux3.0.35、Linux3.0.35 Qt eMMC`烧录脚本；
+* 烧录系统存放目录：`Profiles/Linux/OS Firmware/files`
+* 存放文件名：
+  * `sd.img`;
