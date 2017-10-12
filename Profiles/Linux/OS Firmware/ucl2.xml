@@ -824,4 +824,56 @@
 	<CMD state="Updater" type="push" body="$ echo Update Complete!">Done</CMD>
 	
 </LIST>
+
+  <LIST name="emmc-6dl-img" desc="Choose eMMC as media">
+
+	<CMD state="BootStrap" type="boot" body="BootStrap" file ="firmware/u-boot-imx6dl%board%_sd.imx" ifdev="MX6D">Loading U-boot</CMD>
+
+	<CMD state="BootStrap" type="load" file="firmware/zImage" address="0x12000000"
+		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX6Q MX6D">Loading Kernel.</CMD>
+
+	<CMD state="BootStrap" type="load" file="firmware/%initramfs%" address="0x12C00000"
+		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX6Q MX6D">Loading Initramfs.</CMD>
+
+	<CMD state="BootStrap" type="load" file="firmware/zImage-imx6dl-%board%%ldo%.dtb" address="0x18000000"
+		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX6D">Loading device tree.</CMD>
+
+	<CMD state="BootStrap" type="jump" > Jumping to OS image. </CMD>
+
+	<!-- create partition -->
+	<CMD state="Updater" type="push" body="send" file="mksdcard.sh.tar">Sending partition shell</CMD>
+	<CMD state="Updater" type="push" body="$ tar xf $FILE "> Partitioning...</CMD>
+	<CMD state="Updater" type="push" body="$ sh mksdcard.sh /dev/mmcblk%mmc%"> Partitioning...</CMD>
+
+	<!-- burn uboot -->
+	<CMD state="Updater" type="push" body="$ dd if=/dev/zero of=/dev/mmcblk%mmc% bs=1k seek=768 conv=fsync count=8">clear u-boot arg</CMD>
+	<!-- access boot partition -->
+	<CMD state="Updater" type="push" body="$ echo 0 > /sys/block/mmcblk%mmc%boot0/force_ro">access boot partition 1</CMD>
+	<CMD state="Updater" type="push" body="send" file="files/u-boot-imx6dl%board%_sd.imx" ifdev="MX6D">Sending u-boot.bin</CMD>
+	<CMD state="Updater" type="push" body="$ dd if=$FILE of=/dev/mmcblk%mmc%boot0 bs=512 seek=2">write U-Boot to sd card</CMD>
+	<CMD state="Updater" type="push" body="$ echo 1 > /sys/block/mmcblk%mmc%boot0/force_ro"> re-enable read-only access </CMD>
+	<CMD state="Updater" type="push" body="$ mmc bootpart enable 1 1 /dev/mmcblk%mmc%">enable boot partion 1 to boot</CMD>
+
+	<!-- create fat partition -->
+	<CMD state="Updater" type="push" body="$ while [ ! -e /dev/mmcblk%mmc%p1 ]; do sleep 1; echo \"waiting...\"; done ">Waiting for the partition ready</CMD>
+	<CMD state="Updater" type="push" body="$ mkfs.vfat /dev/mmcblk%mmc%p1">Formatting rootfs partition</CMD>
+	<CMD state="Updater" type="push" body="$ mkdir -p /mnt/mmcblk%mmc%p1"/>
+	<CMD state="Updater" type="push" body="$ mount -t vfat /dev/mmcblk%mmc%p1 /mnt/mmcblk%mmc%p1"/>
+
+	<!-- burn zImage -->
+	<CMD state="Updater" type="push" body="send" file="files/zImage">Sending kernel zImage</CMD>
+	<CMD state="Updater" type="push" body="$ cp $FILE /mnt/mmcblk%mmc%p1/zImage">write kernel image to sd card</CMD>
+
+	<!-- burn dtb -->
+	<CMD state="Updater" type="push" body="send" file="files/zImage-imx6dl-%board%%ldo%.dtb" ifdev="MX6D">Sending Device Tree file</CMD>
+	<CMD state="Updater" type="push" body="$ cp $FILE /mnt/mmcblk%mmc%p1/imx6dl-%board%.dtb" ifdev="MX6D">write device tree to sd card</CMD>
+
+	<CMD state="Updater" type="push" body="$ umount /mnt/mmcblk%mmc%p1">Unmounting vfat partition</CMD>
+	<!-- burn rootfs -->
+	<CMD state="Updater" type="push" body="$ mkfs.ext3 -F -E nodiscard /dev/mmcblk%mmc%p2">Formatting rootfs partition</CMD>
+	<CMD state="Updater" type="push" body="pipe dd of=/dev/mmcblk%mmc%p2 bs=512" file="files/qt5.rootfs.img">Sending and writting files/qt5.rootfs.img</CMD>
+	<CMD state="Updater" type="push" body="$ sync">Sync file system</CMD>
+	<CMD state="Updater" type="push" body="frf">Finishing rootfs write</CMD>
+	<CMD state="Updater" type="push" body="$ echo Update Complete!">Done</CMD>
+  </LIST>  
 </UCL>
