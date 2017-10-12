@@ -64,6 +64,6 @@
 * 烧录系统存放目录：`Profiles/Linux/OS Firmware/files`
 * 存放文件名：
   * `u-boot-imx6dl.imx`;
-  * `zImage`
+  * `zImage`
   * `zImage-imx6dl-sabresd.dtb`;
   * `qt5.rootfs.img`;
