@@ -53,17 +53,17 @@
 
 ### 1.6 [Linux3.0.35-eMMC-MX6DL-img.vbs](Linux3.0.35-eMMC-MX6DL-img.vbs)：
 
-* `Linux3.0.35、Linux3.0.35 Qt eMMC`烧录脚本；
+* `Linux3.0.35、Linux3.0.35 Qt eMMC` SD image烧录脚本；
 * 烧录系统存放目录：`Profiles/Linux/OS Firmware/files`
 * 存放文件名：
   * `sd.img`;
 
 ### 1.7 [Linux4.1.15-eMMC-MX6DL-img.vbs](Linux4.1.15-eMMC-MX6DL-img.vbs)：
 
-* `Linux3.0.35、Linux3.0.35 Qt eMMC`烧录脚本；
+* `Qt5 eMMC`烧录脚本；
 * 烧录系统存放目录：`Profiles/Linux/OS Firmware/files`
 * 存放文件名：
   * `u-boot-imx6dl.imx`;
-  * 'zImage'
+  * `zImage`
   * `zImage-imx6dl-sabresd.dtb`;
   * `qt5.rootfs.img`;
