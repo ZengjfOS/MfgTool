@@ -63,7 +63,7 @@
 * `Qt5 eMMC`烧录脚本；
 * 烧录系统存放目录：`Profiles/Linux/OS Firmware/files`
 * 存放文件名：
-  * `u-boot-imx6dl.imx`;
+  * `u-boot-imx6dlsabresd_sd.imx`;
   * `zImage`
   * `zImage-imx6dl-sabresd.dtb`;
   * `qt5.rootfs.img`;
