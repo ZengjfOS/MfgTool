@@ -173,6 +173,18 @@
 	<CMD state="Updater" type="push" body="$ mkdir -p /mnt/mmcblk%mmc%p1"/>
 	<CMD state="Updater" type="push" body="$ mount -t vfat /dev/mmcblk%mmc%p1 /mnt/mmcblk%mmc%p1"/>
 
+    <!-- show hab otp srk -->
+	<CMD state="Updater" type="push" body="$ ls /sys"/>
+	<CMD state="Updater" type="push" body="$ ls /sys/fsl_otp"/>
+	<CMD state="Updater" type="push" body="$ cat /sys/fsl_otp/HW_OCOTP_SRK0"/>
+	<CMD state="Updater" type="push" body="$ cat /sys/fsl_otp/HW_OCOTP_SRK1"/>
+	<CMD state="Updater" type="push" body="$ cat /sys/fsl_otp/HW_OCOTP_SRK2"/>
+	<CMD state="Updater" type="push" body="$ cat /sys/fsl_otp/HW_OCOTP_SRK3"/>
+	<CMD state="Updater" type="push" body="$ cat /sys/fsl_otp/HW_OCOTP_SRK4"/>
+	<CMD state="Updater" type="push" body="$ cat /sys/fsl_otp/HW_OCOTP_SRK5"/>
+	<CMD state="Updater" type="push" body="$ cat /sys/fsl_otp/HW_OCOTP_SRK6"/>
+	<CMD state="Updater" type="push" body="$ cat /sys/fsl_otp/HW_OCOTP_SRK7"/>
+
 	<!-- burn zImage -->
 	<CMD state="Updater" type="push" body="send" file="files/zImage">Sending kernel zImage</CMD>
 	<CMD state="Updater" type="push" body="$ cp $FILE /mnt/mmcblk%mmc%p1/zImage">write kernel image to sd card</CMD>
